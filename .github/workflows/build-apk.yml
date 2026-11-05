@@ -1,1 +1,44 @@
+name: Build Android App
 
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Install packages
+        run: npm install
+      - name: Copy app files
+        run: |
+          mkdir -p www
+          cp index.html sw.js manifest.json icon-192.png icon-512.png www/
+      - name: Create Android project
+        run: |
+          npx cap add android
+          pip install pillow
+          python3 prepare_android.py
+          npx cap sync android
+      - name: Use fixed signing key
+        run: |
+          mkdir -p ~/.android
+          cp debug.keystore ~/.android/debug.keystore
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CoC-Timer-App
+          path: android/app/build/outputs/apk/debug/app-debug.apk
