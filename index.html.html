@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CoC Upgrade Reminder</title>
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e1d6;--accent:#b45309;--free:#15803d;--freebg:#dcfce7;--btn:#b45309;--btntext:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17150f;--card:#221f17;--text:#f3efe3;--muted:#a8a293;--line:#3a3628;--accent:#f59e0b;--free:#86efac;--freebg:#14351f;--btn:#f59e0b;--btntext:#1a1200;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17150f;--card:#221f17;--text:#f3efe3;--muted:#a8a293;--line:#3a3628;--accent:#f59e0b;--free:#86efac;--freebg:#14351f;--btn:#f59e0b;--btntext:#1a1200;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.bar label{font-size:14px;color:var(--muted)}
+select,input{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px}
+button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:9px 14px;background:var(--btn);color:var(--btntext);font-weight:600}
+button.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.card.done{background:var(--freebg);border-color:var(--free)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.name{font-weight:700}
+.tag{font-size:13px;color:var(--muted)}
+.card.done .tag{color:var(--free);font-weight:700}
+.time{font-size:26px;font-weight:700;color:var(--accent);margin:6px 0;font-variant-numeric:tabular-nums}
+.task{font-size:14px;color:var(--muted);margin-bottom:8px}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.row input[type=text]{flex:1 1 100%}
+.row input[type=number]{width:72px}
+.row span{font-size:13px;color:var(--muted)}
+#msg{font-size:13px;color:var(--muted);margin-top:4px}
+</style>
+</head>
+<body>
+<main>
+<h1>CoC Upgrade Reminder</h1>
+<p class="sub">Type the time left from the game and press Start. This page tells you when each builder, the lab or the pet house is free.</p>
+<div class="bar">
+<label for="nb">Builders:</label>
+<select id="nb"></select>
+<button class="ghost" id="alertbtn">Turn on alerts</button>
+</div>
+<div id="msg">Keep this page open, so the sound and alert can work.</div>
+<div id="list" style="margin-top:12px"></div>
+</main>
+<script>
+var KEY="coc-reminder-v1";
+var state={n:5,slots:{}};
+var alerted={};
+var audioCtx=null;
+try{var s=localStorage.getItem(KEY);if(s){var p=JSON.parse(s);if(p&&p.slots){state=p}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+function keys(){var k=[];for(var i=1;i<=state.n;i++)k.push("b"+i);k.push("lab");k.push("pet");return k}
+function label(k){if(k==="lab")return "Laboratory (Research)";if(k==="pet")return "Pet House";return "Builder "+k.slice(1)}
+function fmt(ms){var t=Math.max(0,Math.floor(ms/1000));var d=Math.floor(t/86400);t-=d*86400;var h=Math.floor(t/3600);t-=h*3600;var m=Math.floor(t/60);var s=t-m*60;
+var out="";if(d>0)out+=d+"d ";if(d>0||h>0)out+=h+"h ";out+=m+"m "+(d>0?"":s+"s");return out}
+function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function render(){
+var now=Date.now(),html="";
+keys().forEach(function(k){
+var sl=state.slots[k];var name=label(k);
+if(sl&&sl.end>now){
+html+='<div class="card"><div class="top"><span class="name">'+name+'</span><span class="tag">Busy</span></div><div class="time" id="t-'+k+'">'+fmt(sl.end-now)+'</div><div class="task">'+esc(sl.task||"Upgrading")+'</div><button class="ghost" data-clear="'+k+'">Cancel</button></div>';
+}else if(sl){
+html+='<div class="card done"><div class="top"><span class="name">'+name+'</span><span class="tag">FREE NOW</span></div><div class="time" style="color:var(--free)">Done!</div><div class="task">'+esc(sl.task||"Upgrade")+' is finished. Start the next one in the game.</div><button data-clear="'+k+'">Okay, set next timer</button></div>';
+}else{
+html+='<div class="card"><div class="top"><span class="name">'+name+'</span><span class="tag">Free</span></div><div class="row"><input type="text" id="n-'+k+'" placeholder="What are you upgrading?"><input type="number" min="0" id="d-'+k+'" placeholder="0"><span>d</span><input type="number" min="0" max="23" id="h-'+k+'" placeholder="0"><span>h</span><input type="number" min="0" max="59" id="m-'+k+'" placeholder="0"><span>m</span><button data-start="'+k+'">Start</button></div></div>';
+}});
+document.getElementById("list").innerHTML=html;
+}
+document.getElementById("list").addEventListener("click",function(e){
+var c=e.target.getAttribute("data-clear"),s=e.target.getAttribute("data-start");
+if(c){delete state.slots[c];delete alerted[c];save();render()}
+if(s){
+var d=+document.getElementById("d-"+s).value||0,h=+document.getElementById("h-"+s).value||0,m=+document.getElementById("m-"+s).value||0;
+var ms=((d*24+h)*60+m)*60000;if(ms<=0)return;
+state.slots[s]={task:document.getElementById("n-"+s).value.trim(),end:Date.now()+ms};delete alerted[s];save();render()}
+});
+var sel=document.getElementById("nb");
+for(var i=1;i<=6;i++){var o=document.createElement("option");o.value=i;o.textContent=i;if(i===state.n)o.selected=true;sel.appendChild(o)}
+sel.addEventListener("change",function(){state.n=+sel.value;save();render()});
+function beep(){
+try{if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+[0,0.25,0.5].forEach(function(t){var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=880;o.connect(g);g.connect(audioCtx.destination);g.gain.value=0.2;o.start(audioCtx.currentTime+t);o.stop(audioCtx.currentTime+t+0.15)})}catch(e){}}
+function notify(k){
+beep();
+var sl=state.slots[k];
+try{if("Notification" in window&&Notification.permission==="granted"){new Notification(label(k)+" is free!",{body:(sl&&sl.task?sl.task+" is finished.":"Upgrade finished.")})}}catch(e){}
+}
+document.getElementById("alertbtn").addEventListener("click",function(){
+beep();
+try{if("Notification" in window){Notification.requestPermission().then(function(r){document.getElementById("msg").textContent=r==="granted"?"Alerts are on. Keep this page open.":"Notifications are blocked, but the sound will still play."})}}catch(e){}
+});
+setInterval(function(){
+var now=Date.now(),redo=false;
+keys().forEach(function(k){
+var sl=state.slots[k];if(!sl)return;
+if(sl.end>now){var el=document.getElementById("t-"+k);if(el)el.textContent=fmt(sl.end-now)}
+else if(!alerted[k]){alerted[k]=true;notify(k);redo=true}
+});
+if(redo)render();
+},1000);
+render();
+</script>
+</body>
+</html>
