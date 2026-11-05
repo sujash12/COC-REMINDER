@@ -2,114 +2,236 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#b45309">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>CoC Upgrade Reminder</title>
 <style>
-:root{--bg:#f6f4ee;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e1d6;--accent:#b45309;--free:#15803d;--freebg:#dcfce7;--btn:#b45309;--btntext:#fff;
+:root{--bg1:#f6f2e9;--bg2:#eadfc8;--card:rgba(255,255,255,.78);--text:#1c1917;--muted:#78716c;--line:rgba(0,0,0,.09);--accent:#d97706;--accent2:#f59e0b;--ok:#15803d;--okbg:rgba(22,163,74,.14);--field:rgba(0,0,0,.05);--onacc:#1a1200;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17150f;--card:#221f17;--text:#f3efe3;--muted:#a8a293;--line:#3a3628;--accent:#f59e0b;--free:#86efac;--freebg:#14351f;--btn:#f59e0b;--btntext:#1a1200;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#17150f;--card:#221f17;--text:#f3efe3;--muted:#a8a293;--line:#3a3628;--accent:#f59e0b;--free:#86efac;--freebg:#14351f;--btn:#f59e0b;--btntext:#1a1200;color-scheme:dark}
-*{box-sizing:border-box}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#0c0a09;--bg2:#2a1a0c;--card:rgba(255,255,255,.07);--text:#fafaf9;--muted:#a8a29e;--line:rgba(255,255,255,.11);--ok:#4ade80;--okbg:rgba(74,222,128,.15);--field:rgba(255,255,255,.08);color-scheme:dark}}
+:root[data-theme="dark"]{--bg1:#0c0a09;--bg2:#2a1a0c;--card:rgba(255,255,255,.07);--text:#fafaf9;--muted:#a8a29e;--line:rgba(255,255,255,.11);--ok:#4ade80;--okbg:rgba(74,222,128,.15);--field:rgba(255,255,255,.08);color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{-webkit-user-select:none;user-select:none;overscroll-behavior:none}
+input,textarea{-webkit-user-select:text;user-select:text}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
-main{max-width:640px;margin:0 auto;padding:16px}
-h1{font-size:22px;margin:0 0 4px}
-.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
-.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
-.bar label{font-size:14px;color:var(--muted)}
-select,input{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px}
-button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:9px 14px;background:var(--btn);color:var(--btntext);font-weight:600}
-button.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-.card.done{background:var(--freebg);border-color:var(--free)}
-.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.name{font-weight:700}
-.tag{font-size:13px;color:var(--muted)}
-.card.done .tag{color:var(--free);font-weight:700}
-.time{font-size:26px;font-weight:700;color:var(--accent);margin:6px 0;font-variant-numeric:tabular-nums}
-.task{font-size:14px;color:var(--muted);margin-bottom:8px}
-.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
-.row input[type=text]{flex:1 1 100%}
-.row input[type=number]{width:72px}
-.row span{font-size:13px;color:var(--muted)}
-#msg{font-size:13px;color:var(--muted);margin-top:4px}
+body{margin:0;min-height:100vh;color:var(--text);background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
+main{max-width:900px;margin:0 auto;padding:18px 16px 40px}
+h1{margin:0;font-size:26px;letter-spacing:-.5px}
+.sub{margin:4px 0 0;color:var(--muted);font-size:14px}
+.hero{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+.stat{flex:1 1 140px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;backdrop-filter:blur(12px)}
+.stat b{display:block;font-size:22px}
+.stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.tog,.sel{font:inherit;font-size:14px;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;backdrop-filter:blur(12px)}
+.tog[aria-pressed="true"]{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--onacc);border-color:transparent;font-weight:700}
+.sel{padding:7px 10px}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px;backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.card.done{background:var(--okbg);border-color:var(--ok);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px var(--okbg)}}
+.top{display:flex;align-items:center;gap:10px}
+.ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:var(--field)}
+.name{font-weight:700;flex:1}
+.chip{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--field);color:var(--muted)}
+.card.done .chip{background:var(--ok);color:#fff}
+.time{font-size:30px;font-weight:800;margin:10px 0 2px;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.card.done .time{background:none;color:var(--ok);-webkit-background-clip:initial}
+.task{color:var(--muted);font-size:14px;min-height:20px}
+.bar{height:8px;border-radius:99px;background:var(--field);overflow:hidden;margin:10px 0}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:width 1s linear}
+input,textarea{font:inherit;color:var(--text);background:var(--field);border:1px solid var(--line);border-radius:12px;padding:9px 10px;width:100%}
+.row{display:flex;gap:6px;align-items:center;margin-top:8px}
+.row input{width:100%;text-align:center}
+.row span{font-size:12px;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chips button{font:inherit;font-size:12px;color:var(--text);background:var(--field);border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer}
+.go,.ghost{font:inherit;font-weight:700;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;margin-top:10px;width:100%}
+.go{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--onacc)}
+.ghost{background:var(--field);color:var(--text)}
+details{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px}
+summary{cursor:pointer;font-weight:700}
+details p{font-size:13px;color:var(--muted);margin:8px 0}
+textarea{min-height:110px;resize:vertical}
+.two{display:flex;gap:8px}.two .ghost{width:auto;flex:1}
+.ocr{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}.ocr select{font:inherit;color:var(--text);background:var(--field);border:1px solid var(--line);border-radius:12px;padding:8px}.ocr .go{width:auto;margin:0}
+#ost{font-size:13px;color:var(--muted)}
+#msg{font-size:13px;color:var(--muted);margin-top:8px}
 </style>
 </head>
 <body>
 <main>
-<h1>CoC Upgrade Reminder</h1>
-<p class="sub">Type the time left from the game and press Start. This page tells you when each builder, the lab or the pet house is free.</p>
-<div class="bar">
-<label for="nb">Builders:</label>
-<select id="nb"></select>
-<button class="ghost" id="alertbtn">Turn on alerts</button>
+<h1>CoC Timer</h1>
+<p class="sub" id="sum">Loading...</p>
+<div class="hero">
+<div class="stat"><span>Free now</span><b id="sfree">0</b></div>
+<div class="stat"><span>Next free</span><b id="snext">-</b></div>
 </div>
-<div id="msg">Keep this page open, so the sound and alert can work.</div>
-<div id="list" style="margin-top:12px"></div>
+<div class="tools">
+<select class="sel" id="nb" aria-label="Number of builders"></select>
+<button class="tog" id="tvoice" aria-pressed="true">Voice alert</button>
+<button class="tog" id="ttest">Test voice</button>
+<button class="tog" id="twake" aria-pressed="false">Keep screen on</button>
+<button class="tog" id="tnote">Notifications</button>
+</div>
+<div id="grid"></div>
+<div id="msg">You get a notification with sound even when the app is closed. Voice speaking works while the app is open.</div>
+<details>
+<summary>Add timers from a screenshot or text</summary>
+<p>Take a screenshot of your builder list, lab or pet house in the game. Choose what it shows, then choose the picture (or press Ctrl+V to paste it). The app reads the text, and you can fix mistakes before adding.</p>
+<div class="ocr"><select id="otarget"><option value="b">Builders list</option><option value="lab">Laboratory</option><option value="pet">Pet House</option></select><input type="file" id="ofile" accept="image/*" style="flex:1;min-width:150px"><button class="go" id="ogo">Read screenshot</button></div>
+<div id="ost"></div>
+<p>Or write one timer per line: the slot (b1, b2, lab or pet), the name, and the time left.</p>
+<textarea id="paste" placeholder="b1 Gold Mine 2d 4h 30m&#10;b2 Archer Tower 5h 10m&#10;lab Hog Rider 1d 2h&#10;pet Unicorn 3d"></textarea>
+<button class="go" id="padd">Add these timers</button>
+</details>
 </main>
 <script>
 var KEY="coc-reminder-v1";
-var state={n:5,slots:{}};
-var alerted={};
-var audioCtx=null;
-try{var s=localStorage.getItem(KEY);if(s){var p=JSON.parse(s);if(p&&p.slots){state=p}}}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
-function keys(){var k=[];for(var i=1;i<=state.n;i++)k.push("b"+i);k.push("lab");k.push("pet");return k}
-function label(k){if(k==="lab")return "Laboratory (Research)";if(k==="pet")return "Pet House";return "Builder "+k.slice(1)}
-function fmt(ms){var t=Math.max(0,Math.floor(ms/1000));var d=Math.floor(t/86400);t-=d*86400;var h=Math.floor(t/3600);t-=h*3600;var m=Math.floor(t/60);var s=t-m*60;
-var out="";if(d>0)out+=d+"d ";if(d>0||h>0)out+=h+"h ";out+=m+"m "+(d>0?"":s+"s");return out}
-function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var st={n:5,slots:{},voice:true,wake:false};
+var drafts={},alerted={},rings={},lock=null,ctx=null;
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.slots){for(var q in p)st[q]=p[q]}}}catch(e){}
+
+var LN=(window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.LocalNotifications)||null;
+var isApp=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+function nid(k){return k==="lab"?7:k==="pet"?8:+k.slice(1)}
+function lnSchedule(k){var sl=st.slots[k];if(!LN||!sl||sl.end<=Date.now())return;
+try{LN.schedule({notifications:[{id:nid(k),title:label(k)+" is free!",body:(sl.task?sl.task+" is finished. ":"")+"Start your next upgrade.",channelId:"upgrades",schedule:{at:new Date(sl.end),allowWhileIdle:true}}]}).catch(function(){})}catch(e){}}
+function lnCancel(k){if(!LN)return;try{LN.cancel({notifications:[{id:nid(k)}]}).catch(function(){})}catch(e){}}
+function lnSetup(){if(!LN)return;
+try{LN.createChannel({id:"upgrades",name:"Upgrade finished",description:"Tells you when a builder, lab or pet house is free",importance:5,visibility:1,vibration:true,lights:true}).catch(function(){});
+LN.requestPermissions().then(function(){keys().forEach(lnSchedule)}).catch(function(){})}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function keys(){var k=[];for(var i=1;i<=st.n;i++)k.push("b"+i);k.push("lab");k.push("pet");return k}
+function label(k){return k==="lab"?"Laboratory":k==="pet"?"Pet House":"Builder "+k.slice(1)}
+function icon(k){return k==="lab"?"\u{1F9EA}":k==="pet"?"\u{1F43E}":"\u{1F528}"}
+function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function fmt(ms){var t=Math.max(0,Math.floor(ms/1000)),d=Math.floor(t/86400);t-=d*86400;var h=Math.floor(t/3600);t-=h*3600;var m=Math.floor(t/60),s=t-m*60;
+if(d>0)return d+"d "+h+"h "+m+"m";if(h>0)return h+"h "+m+"m "+s+"s";return m+"m "+s+"s"}
+function dr(k){return drafts[k]||(drafts[k]={task:"",d:"",h:"",m:""})}
+var PRE=[["1h",0,1,0],["6h",0,6,0],["12h",0,12,0],["1d",1,0,0],["3d",3,0,0],["7d",7,0,0],["14d",14,0,0]];
 function render(){
-var now=Date.now(),html="";
+var now=Date.now(),h="";
 keys().forEach(function(k){
-var sl=state.slots[k];var name=label(k);
+var sl=st.slots[k];
+h+='<div class="card'+(sl&&sl.end<=now?" done":"")+'"><div class="top"><div class="ico">'+icon(k)+'</div><div class="name">'+label(k)+'</div><span class="chip">'+(sl?(sl.end>now?"Busy":"FREE NOW"):"Free")+'</span></div>';
 if(sl&&sl.end>now){
-html+='<div class="card"><div class="top"><span class="name">'+name+'</span><span class="tag">Busy</span></div><div class="time" id="t-'+k+'">'+fmt(sl.end-now)+'</div><div class="task">'+esc(sl.task||"Upgrading")+'</div><button class="ghost" data-clear="'+k+'">Cancel</button></div>';
+h+='<div class="time" id="t-'+k+'">'+fmt(sl.end-now)+'</div><div class="task">'+esc(sl.task||"Upgrading")+'</div><div class="bar"><i id="p-'+k+'"></i></div><button class="ghost" data-a="clear" data-k="'+k+'">Cancel timer</button>';
 }else if(sl){
-html+='<div class="card done"><div class="top"><span class="name">'+name+'</span><span class="tag">FREE NOW</span></div><div class="time" style="color:var(--free)">Done!</div><div class="task">'+esc(sl.task||"Upgrade")+' is finished. Start the next one in the game.</div><button data-clear="'+k+'">Okay, set next timer</button></div>';
+h+='<div class="time">Done!</div><div class="task">'+esc(sl.task||"Upgrade")+' is finished. Start the next one in the game.</div><button class="go" data-a="clear" data-k="'+k+'">OK, set next timer</button>';
 }else{
-html+='<div class="card"><div class="top"><span class="name">'+name+'</span><span class="tag">Free</span></div><div class="row"><input type="text" id="n-'+k+'" placeholder="What are you upgrading?"><input type="number" min="0" id="d-'+k+'" placeholder="0"><span>d</span><input type="number" min="0" max="23" id="h-'+k+'" placeholder="0"><span>h</span><input type="number" min="0" max="59" id="m-'+k+'" placeholder="0"><span>m</span><button data-start="'+k+'">Start</button></div></div>';
-}});
-document.getElementById("list").innerHTML=html;
+var d=dr(k);
+h+='<input type="text" data-f="task" data-k="'+k+'" placeholder="What are you upgrading?" value="'+esc(d.task)+'"><div class="row"><input type="number" min="0" inputmode="numeric" data-f="d" data-k="'+k+'" placeholder="0" value="'+esc(d.d)+'"><span>d</span><input type="number" min="0" max="23" inputmode="numeric" data-f="h" data-k="'+k+'" placeholder="0" value="'+esc(d.h)+'"><span>h</span><input type="number" min="0" max="59" inputmode="numeric" data-f="m" data-k="'+k+'" placeholder="0" value="'+esc(d.m)+'"><span>m</span></div><div class="chips">';
+PRE.forEach(function(x){h+='<button data-a="pre" data-k="'+k+'" data-v="'+x[1]+','+x[2]+','+x[3]+'">'+x[0]+'</button>'});
+h+='</div><button class="go" data-a="start" data-k="'+k+'">Start timer</button>';
 }
-document.getElementById("list").addEventListener("click",function(e){
-var c=e.target.getAttribute("data-clear"),s=e.target.getAttribute("data-start");
-if(c){delete state.slots[c];delete alerted[c];save();render()}
-if(s){
-var d=+document.getElementById("d-"+s).value||0,h=+document.getElementById("h-"+s).value||0,m=+document.getElementById("m-"+s).value||0;
-var ms=((d*24+h)*60+m)*60000;if(ms<=0)return;
-state.slots[s]={task:document.getElementById("n-"+s).value.trim(),end:Date.now()+ms};delete alerted[s];save();render()}
-});
-var sel=document.getElementById("nb");
-for(var i=1;i<=6;i++){var o=document.createElement("option");o.value=i;o.textContent=i;if(i===state.n)o.selected=true;sel.appendChild(o)}
-sel.addEventListener("change",function(){state.n=+sel.value;save();render()});
-function beep(){
-try{if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-[0,0.25,0.5].forEach(function(t){var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=880;o.connect(g);g.connect(audioCtx.destination);g.gain.value=0.2;o.start(audioCtx.currentTime+t);o.stop(audioCtx.currentTime+t+0.15)})}catch(e){}}
-function notify(k){
-beep();
-var sl=state.slots[k];
-try{if("Notification" in window&&Notification.permission==="granted"){new Notification(label(k)+" is free!",{body:(sl&&sl.task?sl.task+" is finished.":"Upgrade finished.")})}}catch(e){}
+h+='</div>'});
+document.getElementById("grid").innerHTML=h;
+tick(true);
 }
-document.getElementById("alertbtn").addEventListener("click",function(){
-beep();
-try{if("Notification" in window){Notification.requestPermission().then(function(r){document.getElementById("msg").textContent=r==="granted"?"Alerts are on. Keep this page open.":"Notifications are blocked, but the sound will still play."})}}catch(e){}
+var g=document.getElementById("grid");
+g.addEventListener("input",function(e){var f=e.target.getAttribute("data-f");if(f)dr(e.target.getAttribute("data-k"))[f]=e.target.value});
+g.addEventListener("click",function(e){
+var a=e.target.getAttribute("data-a"),k=e.target.getAttribute("data-k");if(!a)return;
+if(a==="clear"){lnCancel(k);delete st.slots[k];delete alerted[k];stopRing(k);save();render()}
+if(a==="pre"){var v=e.target.getAttribute("data-v").split(","),d=dr(k);d.d=v[0]==="0"?"":v[0];d.h=v[1]==="0"?"":v[1];d.m=v[2]==="0"?"":v[2];render()}
+if(a==="start"){var d=dr(k),ms=(((+d.d||0)*24+(+d.h||0))*60+(+d.m||0))*60000;if(ms<=0)return;
+st.slots[k]={task:(d.task||"").trim(),start:Date.now(),end:Date.now()+ms};delete drafts[k];delete alerted[k];unlock();save();lnSchedule(k);render()}
 });
-setInterval(function(){
-var now=Date.now(),redo=false;
+function unlock(){try{if(!ctx)ctx=new (window.AudioContext||window.webkitAudioContext)();if(ctx.state==="suspended")ctx.resume()}catch(e){}}
+function beep(){try{unlock();[0,.25,.5].forEach(function(t){var o=ctx.createOscillator(),gn=ctx.createGain();o.frequency.value=880;o.connect(gn);gn.connect(ctx.destination);gn.gain.value=.2;o.start(ctx.currentTime+t);o.stop(ctx.currentTime+t+.15)})}catch(e){}}
+function speak(t){if(!st.voice||!("speechSynthesis" in window))return;try{var u=new SpeechSynthesisUtterance(t);u.rate=.95;speechSynthesis.speak(u)}catch(e){}}
+function msgFor(k){var sl=st.slots[k],w=sl&&sl.task?sl.task:"";
+if(k==="lab")return "Laboratory is free. "+(w?w+" research is finished.":"Research is finished.");
+if(k==="pet")return "Pet house is free. "+(w?w+" is finished.":"The upgrade is finished.");
+return "Builder "+k.slice(1)+" is free. "+(w?w+" is finished.":"The upgrade is finished.")}
+function ring(k){var c=0;(function go(){var sl=st.slots[k];if(!sl||sl.end>Date.now()||c>=3)return;c++;beep();speak(msgFor(k));rings[k]=setTimeout(go,9000)})()}
+function stopRing(k){clearTimeout(rings[k]);try{speechSynthesis.cancel()}catch(e){}}
+function notify(k){if(LN)return;try{if("Notification" in window&&Notification.permission==="granted")new Notification(label(k)+" is free!",{body:msgFor(k)})}catch(e){}}
+function tick(first){
+var now=Date.now(),free=0,next=null,redo=false;
 keys().forEach(function(k){
-var sl=state.slots[k];if(!sl)return;
-if(sl.end>now){var el=document.getElementById("t-"+k);if(el)el.textContent=fmt(sl.end-now)}
-else if(!alerted[k]){alerted[k]=true;notify(k);redo=true}
+var sl=st.slots[k];
+if(!sl||sl.end<=now){free++;if(sl&&!alerted[k]){alerted[k]=true;ring(k);notify(k);if(!first)redo=true}return}
+if(next===null||sl.end<next.end)next={k:k,end:sl.end};
+var el=document.getElementById("t-"+k);if(el)el.textContent=fmt(sl.end-now);
+var pb=document.getElementById("p-"+k);if(pb&&sl.start)pb.style.width=Math.min(100,Math.max(0,(now-sl.start)/(sl.end-sl.start)*100))+"%";
 });
+document.getElementById("sfree").textContent=free;
+document.getElementById("snext").textContent=next?fmt(next.end-now):"-";
+document.getElementById("sum").textContent=next?label(next.k)+" will be free first.":(free?"Everything is free. Start your upgrades!":"");
 if(redo)render();
-},1000);
+}
+var nb=document.getElementById("nb");
+for(var i=1;i<=6;i++){var o=document.createElement("option");o.value=i;o.textContent=i+" builders";if(i===st.n)o.selected=true;nb.appendChild(o)}
+nb.addEventListener("change",function(){st.n=+nb.value;save();render()});
+function setTog(id,on){var b=document.getElementById(id);b.setAttribute("aria-pressed",on?"true":"false")}
+setTog("tvoice",st.voice);setTog("twake",st.wake);
+document.getElementById("tvoice").addEventListener("click",function(){st.voice=!st.voice;setTog("tvoice",st.voice);unlock();if(st.voice)speak("Voice alert is on.");save()});
+document.getElementById("ttest").addEventListener("click",function(){unlock();beep();var was=st.voice;st.voice=true;speak("Builder 1 is free. Gold mine is finished.");st.voice=was});
+document.getElementById("tnote").addEventListener("click",function(){unlock();if(LN){lnSetup();document.getElementById("msg").textContent="Notifications are on. You will get a message even when the app is closed.";return}try{if("Notification" in window){Notification.requestPermission().then(function(r){document.getElementById("msg").textContent=r==="granted"?"Notifications are on.":"Notifications are blocked. Sound and voice still work."})}}catch(e){}});
+async function wl(on){try{if(on&&"wakeLock" in navigator){lock=await navigator.wakeLock.request("screen")}else if(lock){await lock.release();lock=null}}catch(e){}}
+document.getElementById("twake").addEventListener("click",function(){st.wake=!st.wake;setTog("twake",st.wake);wl(st.wake);save()});
+document.addEventListener("visibilitychange",function(){if(st.wake&&document.visibilityState==="visible")wl(true)});
+if(st.wake)wl(true);
+document.getElementById("padd").addEventListener("click",function(){
+var lines=document.getElementById("paste").value.split("\n"),added=0,now=Date.now();
+lines.forEach(function(ln){
+var m=ln.match(/^\s*(b(?:uilder)?\s?([1-6])|lab(?:oratory)?|pet(?:\s?house)?)\b[\s:,\-|]*(.*)$/i);if(!m)return;
+var key=m[2]?"b"+m[2]:(/^lab/i.test(m[1])?"lab":"pet"),rest=m[3],ms=0;
+rest=rest.replace(/(\d+)\s*(d|h|m|s)(?![a-z])/gi,function(_,n,u){n=+n;u=u.toLowerCase();ms+=n*(u==="d"?86400:u==="h"?3600:u==="m"?60:1)*1000;return ""});
+var name=rest.replace(/^[\s:,\-|]+|[\s:,\-|]+$/g,"");
+if(ms<=0)return;
+if(m[2]&&+m[2]>st.n){st.n=+m[2];nb.value=st.n}
+st.slots[key]={task:name,start:now,end:now+ms};delete alerted[key];added++});
+document.getElementById("msg").textContent=added?added+" timer(s) added.":"No timer found. Use lines like: b1 Gold Mine 2d 4h 30m";
+if(added){document.getElementById("paste").value="";unlock();save();render()}
+});
+
+function toText(ms){var s=Math.round(ms/1000),d=Math.floor(s/86400);s-=d*86400;var h=Math.floor(s/3600);s-=h*3600;var m=Math.floor(s/60);return (d?d+"d ":"")+(h?h+"h ":"")+(m?m+"m":"")}
+function parseTimes(line){var ms=0;var rest=line.replace(/(\d+)\s*(d|h|m|s)(?![a-z])/gi,function(_,n,u){n=+n;u=u.toLowerCase();ms+=n*(u==="d"?86400:u==="h"?3600:u==="m"?60:1)*1000;return " "});return{ms:ms,name:rest.replace(/[^A-Za-z0-9' ]+/g," ").replace(/\s+/g," ").trim()}}
+function ocrToLines(text,target){
+var out=[],bi=1;
+text.split("\n").forEach(function(ln){
+var r=parseTimes(ln);if(r.ms<=0||(r.ms<60000))return;
+var key=target==="lab"?"lab":target==="pet"?"pet":"b"+bi;
+if(target==="b"){if(bi>6)return;bi++}else if(out.length)return;
+out.push(key+" "+r.name+" "+toText(r.ms))});
+return out}
+function loadOCR(){return new Promise(function(res,rej){if(window.Tesseract)return res();var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";s.onload=res;s.onerror=function(){rej(new Error("load"))};document.head.appendChild(s)})}
+function prep(file,invert){return new Promise(function(res,rej){
+var img=new Image(),url=URL.createObjectURL(file);
+img.onload=function(){var sc=Math.min(2,1600/img.width);if(sc<.5)sc=.5;var c=document.createElement("canvas");c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);var x=c.getContext("2d");x.drawImage(img,0,0,c.width,c.height);
+if(invert){var d=x.getImageData(0,0,c.width,c.height),p=d.data;for(var i=0;i<p.length;i+=4){var g=.3*p[i]+.59*p[i+1]+.11*p[i+2];var v=g>165?0:255;p[i]=p[i+1]=p[i+2]=v}x.putImageData(d,0,0)}
+URL.revokeObjectURL(url);res(c)};
+img.onerror=function(){rej(new Error("img"))};img.src=url})}
+var shot=null;
+async function readShot(file){
+var ost=document.getElementById("ost"),tg=document.getElementById("otarget").value;
+if(!file){ost.textContent="Please choose a screenshot first.";return}
+try{
+ost.textContent="Loading the reader (first time can take a minute)...";
+await loadOCR();
+var best=[],tries=[true,false];
+for(var i=0;i<tries.length;i++){
+ost.textContent="Reading the picture, step "+(i+1)+" of 2...";
+var cv=await prep(file,tries[i]);
+var r=await Tesseract.recognize(cv,"eng");
+var lines=ocrToLines(r.data.text,tg);
+if(lines.length>best.length)best=lines;
+if(best.length&&tg!=="b")break}
+if(best.length){document.getElementById("paste").value=best.join("\n");ost.textContent="Done. Please check the lines below, fix any mistake, then press Add these timers."}
+else ost.textContent="I could not find any time in this picture. Try a clearer screenshot, or write the lines yourself."
+}catch(e){ost.textContent="The reader could not start. Check your internet and try again."}}
+document.getElementById("ogo").addEventListener("click",function(){readShot(document.getElementById("ofile").files[0])});
+document.addEventListener("paste",function(e){var it=(e.clipboardData&&e.clipboardData.items)||[];for(var i=0;i<it.length;i++){if(it[i].type.indexOf("image")===0){var f=it[i].getAsFile();document.querySelector("details").open=true;readShot(f);break}}});
 render();
-if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+setInterval(function(){tick(false)},1000);
+lnSetup();
+if(!isApp&&"serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
 </script>
 </body>
 </html>

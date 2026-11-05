@@ -1,0 +1,7 @@
+{
+  "appId": "com.sujash.coctimer",
+  "appName": "CoC Timer",
+  "webDir": "www",
+  "backgroundColor": "#0c0a09",
+  "android": { "backgroundColor": "#0c0a09" }
+}
